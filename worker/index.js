@@ -5,6 +5,7 @@ const origins = Object.freeze({
   jeopardy: 'https://jeopardy.ailab-452.workers.dev',
   cloze: 'https://cloze.ailab-452.workers.dev',
   'cli-adventures': 'https://cli-adventures.ailab-452.workers.dev',
+  'chess-lm': 'https://chess-lm.ailab-452.workers.dev',
 });
 const privateHeaders = { 'cache-control': 'no-store', 'x-content-type-options': 'nosniff', 'referrer-policy': 'strict-origin-when-cross-origin' };
 export default {

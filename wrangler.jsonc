@@ -26,6 +26,10 @@
     {
       "binding": "CLI_ADVENTURES",
       "service": "cli-adventures"
+    },
+    {
+      "binding": "CHESS_LM",
+      "service": "chess-lm"
     }
   ],
   "vars": {

@@ -43,8 +43,8 @@ h1{margin:0 0 20px;font-size:clamp(40px,5.8vw,76px);font-weight:400;line-height:
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 @media(forced-colors:active){.game,.site-shell,.site-header,.site-footer{border-color:CanvasText}.game:focus-visible{outline-color:Highlight}.arrow{color:LinkText}}
 
-:root{--amber:#f4c789;--lime:#b9dc99;--blue:#91bfff}
-.accent-cyan{--accent:var(--cyan)}.accent-violet{--accent:var(--violet)}.accent-pink{--accent:var(--pink)}.accent-amber{--accent:var(--amber)}.accent-lime{--accent:var(--lime)}.accent-blue{--accent:var(--blue)}
+:root{--amber:#f4c789;--lime:#b9dc99;--blue:#91bfff;--silver:#dce1e7}
+.accent-cyan{--accent:var(--cyan)}.accent-violet{--accent:var(--violet)}.accent-pink{--accent:var(--pink)}.accent-amber{--accent:var(--amber)}.accent-lime{--accent:var(--lime)}.accent-blue{--accent:var(--blue)}.accent-silver{--accent:var(--silver)}
 .project{padding-top:32px}.back-link{display:inline-flex;align-items:center;min-height:44px;margin-bottom:32px;color:var(--muted);font-size:1rem}.back-link:hover,.project-source:hover{color:var(--accent)}
 .project-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:clamp(32px,5vw,64px);padding-bottom:36px;align-items:start}
 .project-identity{min-width:0}.project h1{font-family:var(--suite-display);font-size:clamp(2.75rem,5vw,4.5rem);font-weight:600;letter-spacing:-.025em;overflow-wrap:anywhere}

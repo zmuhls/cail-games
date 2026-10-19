@@ -67,4 +67,15 @@ export const games = [
     ],
     note:'Progress lasts for the current tab and resets when the page reloads.',
   },
+  {
+    id:'chess-lm', title:'Chess / LM', author:'Zach Muhlbauer',
+    github:'https://github.com/zmuhls/chess-lm',
+    play:'https://chess-lm.ailab-452.workers.dev/', accent:'silver',
+    teaser:'Play Stockfish and examine its replies with a language-model coach',
+    paragraphs:[
+      'Chess / LM pairs a browser chess game with a language-model coach. You play White against Stockfish, compare its candidate replies, and read a short explanation of what your move changed and what to consider next.',
+      'Stockfish searches the position and selects the moves. The engine lines show its legal candidates, while the coach makes a separate model call to explain the supplied evidence. Players can compare those explanations with the board, test a different continuation, and ask where a plausible reading misses a tactical detail.',
+    ],
+    note:'The chess engine runs in your browser. Coaching needs an internet connection.',
+  },
 ];

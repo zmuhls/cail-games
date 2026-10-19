@@ -24,6 +24,30 @@
     "capturedAt": "2026-10-17T05:11:12.447Z"
   },
   {
+    "game": "chess-lm",
+    "view": 1,
+    "caption": "Opening position",
+    "alt": "Chess / LM on its Cloudflare Worker with the opening board, Stockfish opponent, empty coach, and CAIL Games navigation.",
+    "source": "https://chess-lm.ailab-452.workers.dev/",
+    "capturedAt": "2026-10-19T04:29:13.410Z"
+  },
+  {
+    "game": "chess-lm",
+    "view": 2,
+    "caption": "A coached turn",
+    "alt": "Chess / LM after e4 and Stockfish’s d5 reply, with a real Gemma coach response and engine candidate replies.",
+    "source": "https://chess-lm.ailab-452.workers.dev/",
+    "capturedAt": "2026-10-19T04:29:18.708Z"
+  },
+  {
+    "game": "chess-lm",
+    "view": 3,
+    "caption": "Compare engine lines",
+    "alt": "Chess / LM with Stockfish’s e6 candidate expanded to show its continuation beside the board and real model commentary.",
+    "source": "https://chess-lm.ailab-452.workers.dev/",
+    "capturedAt": "2026-10-19T04:29:18.794Z"
+  },
+  {
     "game": "cli-adventures",
     "view": 1,
     "caption": "Terminal challenges",

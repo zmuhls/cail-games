@@ -7,6 +7,8 @@ const origins = Object.freeze({
   'cli-adventures': 'https://cli-adventures.ailab-452.workers.dev',
   'chess-lm': 'https://chess-lm.ailab-452.workers.dev',
 });
+// Doorway serves the arcade at tools.ailab.gc.cuny.edu/games and forwards the full path.
+const MOUNT = '/games';
 const privateHeaders = { 'cache-control': 'no-store', 'x-content-type-options': 'nosniff', 'referrer-policy': 'strict-origin-when-cross-origin' };
 export default {
   async fetch(request, env) {
@@ -14,6 +16,14 @@ export default {
     if (env.LEGACY_REDIRECT === 'true') {
       const target = new URL('https://games.ailab-452.workers.dev');
       target.pathname = url.pathname; target.search = url.search;
+      return new Response(null,{status:308,headers:{...privateHeaders,location:target.href}});
+    }
+    const mounted = url.pathname === MOUNT || url.pathname.startsWith(MOUNT + '/');
+    if (mounted) url.pathname = url.pathname.slice(MOUNT.length) || '/';
+    // Once the Tools mount is live, every other address moves there.
+    if (env.CANONICAL_ORIGIN && url.pathname !== '/health' && (!mounted || url.origin !== env.CANONICAL_ORIGIN)) {
+      const target = new URL(env.CANONICAL_ORIGIN);
+      target.pathname = MOUNT + url.pathname; target.search = url.search;
       return new Response(null,{status:308,headers:{...privateHeaders,location:target.href}});
     }
     if (!['GET', 'HEAD'].includes(request.method)) return new Response('Method not allowed', {status:405, headers:{...privateHeaders,allow:'GET, HEAD'}});
@@ -43,8 +53,11 @@ export default {
     if (['/auth/start', '/my-work', '/my-work/'].includes(url.pathname)) {
       return new Response(null, {status:302,headers:{...privateHeaders,location:'https://tools.ailab.gc.cuny.edu/my-work/'}});
     }
-    const response = await env.ASSETS.fetch(request);
+    const response = await env.ASSETS.fetch(new Request(url, request));
     const headers = new Headers(response.headers);
+    // The asset layer redirects by unmounted path, such as /cadavre to /cadavre/.
+    const location = headers.get('location');
+    if (location?.startsWith('/') && !location.startsWith('//')) headers.set('location', MOUNT + location);
     headers.set('x-content-type-options','nosniff');
     headers.set('referrer-policy','strict-origin-when-cross-origin');
     headers.set('content-security-policy',"default-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'");

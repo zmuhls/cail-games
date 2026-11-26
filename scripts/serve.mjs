@@ -8,7 +8,7 @@ const mime = { '.html':'text/html; charset=utf-8', '.js':'text/javascript; chars
 createServer(async (req, res) => {
   if (!['GET','HEAD'].includes(req.method)) { res.writeHead(405); res.end(); return; }
   try {
-    const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
+    const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname).replace(/^\/games(?=\/|$)/, '') || '/';
     const base = !process.argv.includes('--dist') && pathname.startsWith('/assets/') ? publicRoot : root;
     const file = resolve(base, '.' + (pathname.endsWith('/') ? pathname + 'index.html' : pathname));
     if (!file.startsWith(base + sep) || !(await stat(file)).isFile()) throw new Error('not found');

@@ -65,3 +65,42 @@ test('the old worker preserves page paths and saved-work queries on the canonica
   assert.equal(response.status,308);
   assert.equal(response.headers.get('location'),'https://games.ailab-452.workers.dev/cadavre/play/?work=saved-poem');
 });
+
+test('the Tools mount serves the same pages, launches and redirects under /games', async () => {
+  const served = [];
+  const env = {ASSETS:{fetch:async req => {
+    const {pathname} = new URL(req.url); served.push(pathname);
+    return pathname === '/cadavre' ? new Response(null,{status:307,headers:{location:'/cadavre/'}}) : new Response('Arcade');
+  }}};
+  const tools = path => new Request('https://tools.ailab.gc.cuny.edu' + path);
+  for (const path of ['/games', '/games/', '/games/cadavre/', '/games/assets/arcade.js']) assert.equal((await worker.fetch(tools(path), env)).status, 200);
+  assert.deepEqual(served, ['/', '/', '/cadavre/', '/assets/arcade.js']);
+  const slash = await worker.fetch(tools('/games/cadavre'), env);
+  assert.equal(slash.headers.get('location'), '/games/cadavre/');
+  const launch = await worker.fetch(tools('/games/play/chess-lm/?lesson=endgame'), env);
+  assert.equal(launch.headers.get('location'), 'https://chess-lm.ailab-452.workers.dev/?lesson=endgame');
+  const saved = await worker.fetch(tools('/games/cadavre/play/?work=saved-poem'), env);
+  assert.equal(saved.headers.get('location'), 'https://cadavre.ailab-452.workers.dev/play/?work=saved-poem');
+  const work = await worker.fetch(tools('/games/my-work/'), env);
+  assert.equal(work.headers.get('location'), 'https://tools.ailab.gc.cuny.edu/my-work/');
+  assert.equal((await worker.fetch(new Request('https://tools.ailab.gc.cuny.edu/gamesroom'), env)).status, 200);
+  assert.equal(served.at(-1), '/gamesroom');
+});
+
+test('with a canonical origin set, every other address moves to the Tools mount', async () => {
+  const env = {CANONICAL_ORIGIN:'https://tools.ailab.gc.cuny.edu', ASSETS:{fetch:async () => new Response('Arcade')}};
+  const moved = async url => { const r = await worker.fetch(new Request(url), env); return [r.status, r.headers.get('location')]; };
+  assert.deepEqual(await moved('https://games.ailab-452.workers.dev/'), [308, 'https://tools.ailab.gc.cuny.edu/games/']);
+  assert.deepEqual(await moved('https://games.ailab-452.workers.dev/cadavre/play/?work=saved-poem'), [308, 'https://tools.ailab.gc.cuny.edu/games/cadavre/play/?work=saved-poem']);
+  assert.deepEqual(await moved('https://games.ailab-452.workers.dev/games/chess-lm/'), [308, 'https://tools.ailab.gc.cuny.edu/games/chess-lm/']);
+  assert.deepEqual(await moved('https://tools.ailab.gc.cuny.edu/games/chess-lm/'), [200, null]);
+});
+
+test('built pages link only inside the Tools mount', async () => {
+  const {readFile} = await import('node:fs/promises');
+  for (const page of ['dist/index.html', 'dist/cadavre/index.html']) {
+    const local = [...(await readFile(page,'utf8')).matchAll(/(?:href|src)="(\/[^"]*)"/g)].map(match => match[1]);
+    assert.ok(local.length > 5);
+    assert.deepEqual(local.filter(path => !path.startsWith('/games/')), []);
+  }
+});

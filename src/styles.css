@@ -1,4 +1,4 @@
-@font-face{font-family:Plex Mono;src:url('/assets/fonts/ibm-plex-mono-latin-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Plex Mono;src:url('../assets/fonts/ibm-plex-mono-latin-400.woff2') format('woff2');font-weight:400;font-display:swap}
 :root{color-scheme:dark;--charcoal:#1c1e20;--card:#202224;--text:#f0f0ed;--muted:#b7babc;--line:#55595c;--cyan:#83eedc;--violet:#bcacff;--pink:#f5a3cb;--page-gutter:32px;--body:var(--suite-font);--mono:'Plex Mono',monospace}
 *{box-sizing:border-box}
 html{background:var(--charcoal)}
